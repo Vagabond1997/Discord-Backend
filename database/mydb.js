@@ -62,6 +62,7 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
         username: {type: String, required: true, trim: true},
         password: {type: String, required: true, trim: true},
         cpassword: {type: String, required: true, trim: true},
+        role:{type:String, default:'general',trim:true},
         tokens: [
             {
               token: {

@@ -6,10 +6,10 @@ import bodyParser from "body-parser";
 
 const saveUser = async (req, res) => {
   //getting data
-  const { name, email, phone, username, password, cpassword } = req.body;
+  const { name, email, phone, username, password, cpassword,role } = req.body;
  
   // validation checking if user has not forgot to unfill the data
-  if (!name || !email || !phone || !username || !password || !cpassword) {
+  if (!name || !email || !phone || !username || !password || !cpassword || !role) {
     return res.status(422).json({ error: "Please filled the field properly" });
   }
 
@@ -28,6 +28,7 @@ const saveUser = async (req, res) => {
       username,
       password,
       cpassword,
+      role,
     });
 
     const userRegister = await Users.save();
