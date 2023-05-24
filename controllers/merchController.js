@@ -179,8 +179,8 @@ const sendEmail = async(emailData) => {
   })
 }
 
- //update merch order 
- const updateMerchOrder = async(req,res) => {
+ //update merch 
+ const updateMerch = async(req,res) => {
   try {
     let updateId = req.params.id;
     //get merch by id
@@ -218,4 +218,4 @@ catch(err){
  
 
 
-export {saveMerch,merchList,merchDetail,saveMerchOrder,updateMerchOrder};
+export {saveMerch,merchList,merchDetail,saveMerchOrder,updateMerch};
