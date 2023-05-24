@@ -49,6 +49,7 @@ const saveMerch = async (req, res) => {
 };
 //list all created merch
 const merchList = async (req, res) => {
+  // console.log("userslist",req.user)
    try {
     let merchData= await MerchlistModel.find({});
      res.status(200).json({merch:merchData});

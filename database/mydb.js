@@ -56,21 +56,15 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
 
     
     const userSchema = new mongoose.Schema({
-        name: {type: String, required: true, trim: true},
+        firstname: {type: String, required: true, trim: true},
+        lastname: {type: String, required: true, trim: true},
         email: {type: String, required: true, trim: true},
-        phone: {type: String, required: true, trim: true},
-        username: {type: String, required: true, trim: true},
+        phone: {type: String, required:false, trim: true},
+        username: {type: String, required:false, trim: true},
         password: {type: String, required: true, trim: true},
-        cpassword: {type: String, required: true, trim: true},
         role:{type:String, default:'general',trim:true},
-        tokens: [
-            {
-              token: {
-                type: String,
-                required:true
-              }      
-        }
-    ]
+        token:{type: String,required:false,trim:true},      
+        
     });
 
     //hashing password 
@@ -78,7 +72,6 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
         console.log("it is running up to here");
         if(this.isModified('password')) {
             this.password = await bcrypt.hash(this.password, 12);
-            this.cpassword = await bcrypt.hash(this.cpassword, 12);
         }
         next();
     });
@@ -87,7 +80,7 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
       userSchema.methods.generateAuthToken = async function (req,res) {
         try {
             let token = jwt.sign({_id: this._id}, process.env.SECRET_KEY);
-            this.tokens = this.tokens.concat({token:token});
+            this.token = token;
             await this.save();
             return token;
         }  catch(err) {

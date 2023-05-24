@@ -6,10 +6,11 @@ import bodyParser from "body-parser";
 
 const saveUser = async (req, res) => {
   //getting data
-  const { name, email, phone, username, password, cpassword,role } = req.body;
+  const { firstname, lastname, email, phone,password} = req.body;
  
+
   // validation checking if user has not forgot to unfill the data
-  if (!name || !email || !phone || !username || !password || !cpassword || !role) {
+  if (!firstname || !lastname || !email || !phone  || !password) {
     return res.status(422).json({ error: "Please filled the field properly" });
   }
 
@@ -18,19 +19,18 @@ const saveUser = async (req, res) => {
 
     if(userExist) {
         return res.status(422).json({error: "Email already Exist"});
-    } else if (password !== cpassword) {
-       return res.status(422).json({error:"Password are not matching"});
     }
+    // } else if (password !== cpassword) {
+    //    return res.status(422).json({error:"Password are not matching"});
+    // }
     const Users = new UserModel({
-      name,
+      firstname,
+      lastname,
       email,
       phone,
-      username,
       password,
-      cpassword,
-      role,
+      username:firstname.trim().toLowerCase()+lastname.trim().toLowerCase()
     });
-
     const userRegister = await Users.save();
 
     if (userRegister) {
@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
        const checkPassword = await bcrypt.compare(password,userloginExist.password);
        if(checkPassword){
          const token = await userloginExist.generateAuthToken();
-         console.log(token);
+         console.log('token',userloginExist);
          //storing token into 0cookies 
   
         //  res.cookie("jwtoken", token, {
@@ -80,7 +80,6 @@ const loginUser = async (req, res) => {
         res.status(201).json({ message: "User created Successfully!",data:userData });
        } else {
         res.status(400).json({ error: "Error Credentials Pass!" });
-
        }
 
     } else {
