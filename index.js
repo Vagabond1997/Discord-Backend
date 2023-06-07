@@ -1,7 +1,32 @@
-import express from "express";
+import express, { request } from "express";
 import {router} from "./router/router.js";
 import bodyParser from "body-parser";
 import cors from "cors";
+
+//axios interceptors 
+//   axios.interceptors.request.use (request => {
+//     console.log(request);
+//     return request;
+//   })
+
+//   axios.interceptors.response.use (response => {
+//     console.log(response);
+//     return response;
+//   }) 
+// //admin bro setup 
+// import AdminBro from 'admin-bro';
+// import { buildRouter as AdminBroExpressBuildRouter } from '@admin-bro/express';
+// import pkg from '@admin-bro/express';
+
+
+// const adminBro = new AdminBro({
+//   databases: [],
+//   rootPath: '/admin',
+// });
+
+// const adminRouter = AdminBroExpressBuildRouter(adminBro);
+// app.use(adminBro.options.rootPath, adminRouter);
+
 
 import { config } from 'dotenv';
 config();
@@ -22,3 +47,7 @@ app.use(bodyParser.json())
 app.use('/', router);
 
 app.listen(port, console.log('Port Running on http://localhost:' + port));
+
+//admin bro server 
+// app.use(adminBro.options.rootPath, router)
+// app.listen(8080, () => console.log('AdminBro is under localhost:8080/admin')) 

@@ -6,6 +6,8 @@ import bcrypt from "bcryptjs";
 mongoose.connect('mongodb://localhost:27017/apidb3')
     .then(()=> console.log('Mongodb connected sucessfully'))
     .catch((err)=> console.log(err));
+
+  
  
     const contactSchema = new mongoose.Schema({
         firstname: {type: String, required: true, trim: true},
@@ -41,6 +43,31 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
     
     const BookModel = mongoose.model('books', bookingSchema);
 
+    const merchOrderSchema = new mongoose.Schema({
+        user_id: {type:mongoose.Schema.Types.ObjectId, ref:"User", required: true, trim: true},
+        total_amount : {type: String, required: true, trim: true},
+    });
+
+    const MerchOrderModel = mongoose.model('orders',merchOrderSchema);
+
+    const merchItemOrderSchema = new mongoose.Schema({
+        order_id:  {type:mongoose.Schema.Types.ObjectId, ref:"orders", required: true, trim: true},
+        merch_id: {type:mongoose.Schema.Types.ObjectId, ref:"merches", required: true, trim: true},
+        quantity : {type: String, required: true, trim: true},
+        total_amount : {type: String, required: true, trim: true},
+    });
+    const MerchItemOrderModel = mongoose.model('orderitems',merchItemOrderSchema);
+
+    
+    const shippingSchema = new mongoose.Schema({
+        user_id: {type:mongoose.Schema.Types.ObjectId, ref:"User", required: true, trim: true},
+        phone : {type: String, required: true, trim: true},
+        city: {type: String, required: true, trim: true},
+        address:{type: String, required: true, trim: true},
+        landmark:{type: String, required: true, trim: true},
+    });
+    const ShippingModel = mongoose.model('shippings',shippingSchema);
+
     const merchandizeSchema = new mongoose.Schema({
         name: {type: String, required: true, trim: true},
         category: {type: String, required: true, trim: true},
@@ -66,6 +93,18 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
         token:{type: String,required:false,trim:true},      
         
     });
+    const cartSchema = new mongoose.Schema({
+        merch_id: {type:mongoose.Schema.Types.ObjectId, ref:"merches", required: true, trim: true},
+        user_id: {type:mongoose.Schema.Types.ObjectId, ref:"User", required: true, trim: true},
+        color:  {type: String, required: false, trim: true},
+        size:  {type: String, required: false, trim: true},
+        quantity: {type: String, required: false, trim: true},
+        amount:  {type: String, required: false, trim: true},
+        total_amount:  {type: String, required: false, trim: true},
+        subtotal:  {type: String, required: false, trim: true},
+    });
+    
+    const CartModel = mongoose.model('carts', cartSchema);
 
     //hashing password 
     userSchema.pre('save',async function (next) {
@@ -90,4 +129,4 @@ mongoose.connect('mongodb://localhost:27017/apidb3')
 
     const UserModel = mongoose.model('users', userSchema);
     
-    export {ContactModel,BookModel,VideoModel,MerchlistModel,UserModel};
+    export {ContactModel,BookModel,VideoModel,MerchlistModel,UserModel,CartModel,MerchOrderModel,MerchItemOrderModel,ShippingModel};

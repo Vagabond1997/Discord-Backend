@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
        const checkPassword = await bcrypt.compare(password,userloginExist.password);
        if(checkPassword){
          const token = await userloginExist.generateAuthToken();
-         console.log('token',userloginExist);
+        //  console.log('token',userloginExist);
          //storing token into 0cookies 
   
         //  res.cookie("jwtoken", token, {

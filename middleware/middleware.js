@@ -14,8 +14,17 @@ const jwtProtected = async(req,res,next) => {
          }
          //verify jwt token with the user id
          let token = jwt.verify(bearerToken, process.env.SECRET_KEY);
+         // console.log('bearerToken',token);
+         
         if(token) {
-            req.user = authUser;
+            // req.user = authUser;
+            req.user = {
+               _id:authUser._id,
+               email:authUser.email,
+               role:authUser.role
+            }
+
+            res.status(200)
             next();
         }
      } else {
