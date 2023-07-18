@@ -3,7 +3,7 @@ import {
   MerchItemOrderModel,
   CartModel,
   ShippingModel,
-  MerchlistModel
+  MerchlistModel,
 } from "../database/mydb.js";
 // save merchOrder
 const merchOrder = async (req, res) => {
@@ -21,11 +21,11 @@ const merchOrder = async (req, res) => {
     }
     //
     const Shipping = new ShippingModel({
-        user_id:user_id,
-        phone:phone,
-        city:city,
-        address:address,
-        landmark:landmark,
+      user_id: user_id,
+      phone: phone,
+      city: city,
+      address: address,
+      landmark: landmark,
     });
     const shippingRegister = await Shipping.save();
     if (shippingRegister) {
@@ -63,42 +63,52 @@ const merchOrder = async (req, res) => {
   }
 };
 
-
-//list order and orderitems 
+//list order and orderitems
 
 const orderList = async (req, res) => {
-  
   try {
-   let orderDataList= await MerchItemOrderModel.aggregate([{ 
-    $group : { _id : "$order_id", "order_items" : { "$push": '$$ROOT' } } 
-  }],); //"$first": '$$ROOT' => gives all the fields from orderitemsmodel
-  
+    let products = [];
+    let orderDataList = await MerchItemOrderModel.aggregate([
+      {
+        $group: { _id: "$order_id", order_items: { $push: "$$ROOT" } },
+      },
+    ])
+    // .exec(function (error, result) {
+    //   for(let element of result){
+    //     for(let item of element.order_items){
+    //       MerchItemOrderModel.findOne({ _id: item._id })
+    //         .populate("merch_id")
+    //         .then((product) => {
+    //           products.push(product);
+    //           return item.merch_id = product;
+    //         });
+    //     }
+    //   }
+    // });
+    // orderDataList.forEach(element => {
 
-  // function( e, result ) {
-  //   if ( e ) return;
-    // You would probably have to do some loop here, as probably 'result' is array
-    // if(result.length > 0 ){
-    //   result.forEach( (order,orderKey) => {
-    //       order.order_items.forEach( (orderItem,orderItemKey) => {
-    //       MerchlistModel.findOne( {_id : orderItem.merch_id}, function( e, merch ) {
-    //         if ( e ) return;
-    //         return result[orderKey].order_items[orderItemKey].merch_id = 22;
+    // ,function( e, result ) {
+    //   if ( e ) return;
+    //   // You would probably have to do some loop here, as probably 'result' is array
+    //   if(result.length > 0 ){
+    //     result.forEach( (order,orderKey) => {
+    //         order.order_items.forEach( (orderItem,orderItemKey) => {
+    //         MerchlistModel.findOne( {_id : orderItem.merch_id}, function( e, merch ) {
+    //           if ( e ) return;
+    //           return result[orderKey].order_items[orderItemKey].merch_id = 22;
+    //         });
     //       });
     //     });
-    //   });
-    // }  
-  // }
- 
-
-   return  res.status(200).json({orderDataList});
-  }
-
-  catch (err){
-   console.log(err);
-   return res.status(500).json({message:err})
+    //   }
+    // }
+    // console.log('item',products);
+    return res.status(200).json({ orderDataList });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err });
   }
 };
-export { merchOrder,orderList };
+export { merchOrder, orderList };
 
 // console.log('request-user',req.user);
 
@@ -144,5 +154,3 @@ export { merchOrder,orderList };
 //    catch {
 
 //    }
-
-
